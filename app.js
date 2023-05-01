@@ -26,7 +26,10 @@ app.use(express.urlencoded({ extended: false }));
 
 var mongoStore = MongoStore.create({
 	mongoUrl: `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`,
-	collectionName: 'sessions'
+	collectionName: 'sessions',
+    crypto: {
+		secret: process.env.SESSION_SECRET
+	}
 })
 
 app.use(
