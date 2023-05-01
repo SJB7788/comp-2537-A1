@@ -26,6 +26,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
     session({
+        genid: function(req) {
+        return uid.sync(18);
+      },
         secret: process.env.SESSION_SECRET,
         saveUninitialized: false,
         resave: true
@@ -83,7 +86,6 @@ app.post("/login", (req, res) => {
                         req.session.NAME = user.name;
                         console.log(req.session.GLOBAL_AUTHENTICATED);
                         console.log(req.session.NAME);
-                        req.session.save()
                         res.redirect("/loggedIn");
                         return
                     } else {
