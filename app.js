@@ -160,7 +160,7 @@ const authenticatedOnly = (req, res, next) => {
 };
 
 const createSession = (req, res, next) => {
-    if (sessionModel.find({ session: 'randon' })) {
+    if (sessionModel.exists({ session: 'randon' })) {
         console.log('there is one!');
         next()
     } else {
