@@ -4,7 +4,7 @@ const { default: mongoose } = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const app = express();
-const cookieParser = require("cookie-parser");
+const MongoStore = require('connect-mongo');
 
 const Joi = require("joi");
 
@@ -24,15 +24,19 @@ const {userModel, sessionModel} = require("./model/users");
 const expireTime = 1 * 60 * 60 * 1000;
 app.use(express.urlencoded({ extended: false }));
 
+var mongoStore = MongoStore.create({
+	mongoUrl: `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`,
+	collectionName: 'sessions'
+})
+
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
+        store: mongoStore,
         saveUninitialized: false,
         resave: true
     })
 );
-
-
 
 app.get("/homepage", (req, res) => {
     res.send(`
