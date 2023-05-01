@@ -187,7 +187,7 @@ function getRandomInt(max) {
   }
 
 app.use("/loggedIn", authenticatedOnly); //run the authenitcated only function to see if user is authed or not
-app.use("/loggedIn", createSession); 
+//app.use("/loggedIn", createSession); 
 
 app.get("/loggedIn", (req, res) => {
     image = ['https://cdn.britannica.com/31/122031-050-F8FCA663/Hamburger-cheeseburger.jpg', 'https://media.cnn.com/api/v1/images/stellar/prod/220428140436-04-classic-american-hamburgers.jpg?c=original', 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Hamburger_%28black_bg%29.jpg/640px-Hamburger_%28black_bg%29.jpg']
