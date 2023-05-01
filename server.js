@@ -5,7 +5,12 @@ require('dotenv').config();
 main().catch(error => console.log(error));
 
 async function main() {
-    await mongoose.connect(`mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`)
+    try {
+        await mongoose.connect(`mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`)
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
 
     app.listen(3000, () => {
         console.log("running on port 3000")
