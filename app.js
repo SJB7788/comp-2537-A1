@@ -21,19 +21,18 @@ const {userModel, sessionModel} = require("./model/users");
 
 const expireTime = 1 * 60 * 60 * 1000;
 
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(
     session({
-        genid: function(req) {
-        return uid.sync(18);
-      },
         secret: process.env.SESSION_SECRET,
         saveUninitialized: false,
         resave: true
     })
 );
+
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 
 app.get("/homepage", (req, res) => {
     res.send(`
@@ -86,6 +85,7 @@ app.post("/login", (req, res) => {
                         req.session.NAME = user.name;
                         console.log(req.session.GLOBAL_AUTHENTICATED);
                         console.log(req.session.NAME);
+                        req.session.save()
                         res.redirect("/loggedIn");
                         return
                     } else {
