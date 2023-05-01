@@ -161,6 +161,8 @@ const authenticatedOnly = (req, res, next) => {
 
 const createSession = (req, res, next) => {
     if (sessionModel.findOne({ session: req.headers.cookie.replace('connect.sid=','') })) {
+        next()
+    } else {
         const session = new sessionModel(
             {
                 session: req.headers.cookie.replace('connect.sid=',''),
@@ -176,8 +178,6 @@ const createSession = (req, res, next) => {
                 console.log(err);
                 res.status(500).send("500 Error Session");
             });
-    } else {
-        next()
     }
 };
 
