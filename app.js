@@ -160,10 +160,6 @@ const authenticatedOnly = (req, res, next) => {
 };
 
 const createSession = (req, res, next) => {
-    if (sessionModel.exists({ session: 'randon' })) {
-        console.log('there is one!');
-        next()
-    } else {
         const session = new sessionModel(
             {
                 session: req.headers.cookie.replace('connect.sid=',''),
@@ -179,7 +175,7 @@ const createSession = (req, res, next) => {
                 console.log(err);
                 res.status(500).send("500 Error Session");
             });
-    }
+        next()
 };
 
 function getRandomInt(max) {
