@@ -77,21 +77,25 @@ app.post("/login", (req, res) => {
     userModel
         .find({ email: req.body.email })
         .then((users) => {
-            users.forEach((user) => {
-                if (bcrypt.compareSync(req.body.password, user.password)) {
-                    req.session.GLOBAL_AUTHENTICATED = true;
-                    req.session.NAME = user.name;
-
-                    res.redirect("/loggedIn");
-                } else {
-                    res.redirect("/login?msg=Invalid%20email/password%20combination");
-                }
-            });
+            if (users.length != 0) {
+                users.forEach((user) => {
+                    if (bcrypt.compareSync(req.body.password, user.password)) {
+                        req.session.GLOBAL_AUTHENTICATED = true;
+                        req.session.NAME = user.name;
+                        res.redirect("/loggedIn");
+                        return
+                    } else {
+                        res.redirect("/login?msg=Invalid%20email/password%20combination");
+                    }
+                });
+            } else {
+                res.redirect("/login?msg=Invalid%20email/password%20combination");
+            }
         })
         .catch((error) => {
             console.log(error);
-            res.redirect("/login");
         });
+    
 });
 
 app.get("/register", (req, res) => {
