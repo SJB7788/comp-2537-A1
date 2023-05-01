@@ -82,6 +82,7 @@ app.post("/login", (req, res) => {
                     if (bcrypt.compareSync(req.body.password, user.password)) {
                         req.session.GLOBAL_AUTHENTICATED = true;
                         req.session.NAME = user.name;
+                        console.log(req.session.GLOBAL_AUTHENTICATED);
                         res.redirect("/loggedIn");
                         return
                     } else {
@@ -139,6 +140,7 @@ app.get("/registerError", (req, res) => {
 
 const authenticatedOnly = (req, res, next) => {
     if (!req.session.GLOBAL_AUTHENTICATED) {
+        console.log(req.session.GLOBAL_AUTHENTICATED);
         return res.status(401).send(`
             <p>User not authenticated
             <a href='/homepage'>Go to Home Page</a>
