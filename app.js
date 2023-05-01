@@ -19,19 +19,13 @@ const {userModel, sessionModel} = require("./model/users");
 //     res.redirect('/login');
 // })
 
-let MongoDBStore = require('connect-mongodb-session')(session);
 
-let dbStore = new MongoDBStore({
-    url: `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`,
-    collection: 'sessions'
-})
 
 const expireTime = 1 * 60 * 60 * 1000;
 
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
-        store: dbStore,
         saveUninitialized: false,
         resave: true
     })
@@ -185,7 +179,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
-app.use("/loggedIn", authenticatedOnly); //run the authenitcated only function to see if user is authed or not
+//app.use("/loggedIn", authenticatedOnly); //run the authenitcated only function to see if user is authed or not
 app.use("/loggedIn", createSession); 
 
 app.get("/loggedIn", (req, res) => {
