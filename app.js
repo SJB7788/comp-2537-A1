@@ -161,6 +161,7 @@ const authenticatedOnly = (req, res, next) => {
 
 const createSession = (req, res, next) => {
     if (sessionModel.findOne({ session: req.headers.cookie.replace('connect.sid=','') })) {
+        console.log('there is one!');
         next()
     } else {
         const session = new sessionModel(
