@@ -4,6 +4,7 @@ const { default: mongoose } = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const app = express();
+const cookieParser = require("cookie-parser");
 
 const Joi = require("joi");
 
@@ -23,16 +24,8 @@ const {userModel, sessionModel} = require("./model/users");
 const expireTime = 1 * 60 * 60 * 1000;
 app.use(express.urlencoded({ extended: false }));
 
-let MongoDBStore = require('connect-mongodb-session')(session);
-
-let dbStore = new MongoDBStore({
-    url: `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`,
-    collection: 'sessions'
-})
-
 app.use(
     session({
-        store: dbStore,
         secret: process.env.SESSION_SECRET,
         saveUninitialized: false,
         resave: true
@@ -187,7 +180,7 @@ function getRandomInt(max) {
   }
 
 app.use("/loggedIn", authenticatedOnly); //run the authenitcated only function to see if user is authed or not
-//app.use("/loggedIn", createSession); 
+app.use("/loggedIn", createSession); 
 
 app.get("/loggedIn", (req, res) => {
     image = ['https://cdn.britannica.com/31/122031-050-F8FCA663/Hamburger-cheeseburger.jpg', 'https://media.cnn.com/api/v1/images/stellar/prod/220428140436-04-classic-american-hamburgers.jpg?c=original', 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Hamburger_%28black_bg%29.jpg/640px-Hamburger_%28black_bg%29.jpg']
