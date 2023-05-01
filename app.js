@@ -152,21 +152,25 @@ const authenticatedOnly = (req, res, next) => {
 };
 
 const createSession = (req, res, next) => {
-    const session = new sessionModel(
-        {
-            session: req.headers.cookie.replace('connect.sid=',''),
-        }
-    );
-
-    session
-        .save()
-        .then((result) => {
-            next()
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).send("500 Error Session");
-        });
+    if (sessionModel.findOne({ session: req.headers.cookie.replace('connect.sid=','') })) {
+        const session = new sessionModel(
+            {
+                session: req.headers.cookie.replace('connect.sid=',''),
+            }
+        );
+        
+        session
+            .save()
+            .then((result) => {
+                next()
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(500).send("500 Error Session");
+            });
+    } else {
+        next()
+    }
 };
 
 function getRandomInt(max) {
