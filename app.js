@@ -85,6 +85,7 @@ app.post("/login", (req, res) => {
                         req.session.GLOBAL_AUTHENTICATED = true;
                         req.session.NAME = user.name;
                         console.log(req.session.GLOBAL_AUTHENTICATED);
+                        console.log(req.session.NAME);
                         res.redirect("/loggedIn");
                         return
                     } else {
@@ -142,6 +143,7 @@ app.get("/registerError", (req, res) => {
 
 const authenticatedOnly = (req, res, next) => {
     if (!req.session.GLOBAL_AUTHENTICATED) {
+        console.log(req.session.NAME);
         console.log(req.session.GLOBAL_AUTHENTICATED);
         return res.status(401).send(`
             <p>User not authenticated
