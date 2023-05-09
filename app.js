@@ -43,7 +43,10 @@ app.get("/homepage", (req, res) => {
 });
 
 app.get("/login?", async (req, res) => {
-    let sessionCheck = await sessionModel.find({ session: req.headers.cookie.replace('connect.sid=', '') })
+    let sessionCheck = "";
+    if (req.headers.cookie) {
+        sessionCheck = await sessionModel.find({ session: req.headers.cookie.replace('connect.sid=', '') })
+    } 
     if (!sessionCheck.length) {
         const schema = Joi.object({
             password: Joi.string(),
@@ -68,7 +71,6 @@ app.get("/login?", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-
     await userModel
         .find({ email: req.body.email })
         .then((users) => {
