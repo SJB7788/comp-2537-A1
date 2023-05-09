@@ -163,13 +163,14 @@ app.use(express.static('images'))
 app.use("/members", authenticatedOnly); //run the authenitcated only function to see if user is authed or not
 app.use("/members", createSession);
 app.get("/members", async (req, res) => {
-    let randomImageNumber = Math.floor(Math.random() * 3) + 1;
-    const imageName = `00${randomImageNumber}.jpg`
+    const imageName = ['001.jpg', '002.jpg', '003.jpg']
     console.log(imageName);
     const userList = await userModel.find().select({ '_id': 0, 'name': 1, 'type': 1 })
     res.render('members.ejs', {
         "name": req.session.NAME,
-        "image": imageName,
+        "image1": '001.jpg',
+        "image2": imageName[1],
+        "image3": imageName[2],
         'users': userList,
     })
 });
