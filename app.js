@@ -16,12 +16,24 @@ const expireTime = 1 * 60 * 60 * 1000;
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }));
+
+let MongoDBStore = require('connect-mongodb-session')(session);
+
+let dbStore = new MongoDBStore({
+    url: `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`,
+    crypto: {
+		secret: process.env.SESSION_SECRET
+    }
+})
+
 app.use(
     session({
-        secret: '2acsjdbw - 4h2laosidhajs- 2eeasdds - 56jkoanfg4745 - 99idoasisd',
+        secret: process.env.SESSION_SECRET,
         resave: true,
         saveUninitialized: false,
+        store: dbStore,
         cookie: {
             maxAge: expireTime,
         },
