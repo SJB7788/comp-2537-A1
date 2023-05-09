@@ -5,15 +5,9 @@ require('dotenv').config();
 main().catch(error => console.log(error));
 
 async function main() {
-    try {
-        await mongoose.connect(`mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`)
-        console.log("connected to DB");
-    } catch (error) {
-        console.log(error);
-        process.exit(1);
-    }
+    await mongoose.connect(`mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/comp2537A2?retryWrites=true&w=majority`)
 
-    app.listen(process.env.PORT || 3000, () => {
+    app.listen(3000, () => {
         console.log("running on port 3000")
     })
 }

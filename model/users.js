@@ -1,9 +1,22 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    name: String,
-    email: String,
-    password: String
+    'name': {
+        type: String,
+        unique: true,
+    },
+    'email': String,
+    'password': String,
+    'type': String,
+    'todos': [
+        {
+            "name": String,
+            "done": {
+                type: Boolean,
+                default: false
+            }
+        }
+    ]
 });
 
 const sessionSchema = mongoose.Schema({

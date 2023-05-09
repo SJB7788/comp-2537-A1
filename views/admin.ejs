@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <%- include("template/header") %>
+    <div class="mt-3 container d-flex flex-column align-items-center justify-content-center">
+      <h1>Hello, Welcome to the Admin Page <%= name %></h1>
+      <img src="<%= image %>" alt="hi" style="width: 400px" />
+    </div>
+    <div class="mt-5 container d-flex justify-content-center">
+      <form action="/admin" method="POST">
+        <ul>
+          <% users.forEach((user) => { %>
+          <li>Name: <%= user['name'] %></li>
+          <% if (user['type'] != 'admin') { %>
+          <input type="hidden" id="admin" name="<%= user['name'] %>" />
+          <input type="checkbox" id="admin" name="<%= user['name'] %>" />
+          <label for="<%= user['name'] %>">Admin</label>
+          <% } else { %>
+          <input type="hidden" id="admin" name="<%= user['name'] %>" checked />
+          <input
+            type="checkbox"
+            id="admin"
+            name="<%= user['name'] %>"
+            checked
+          />
+          <label for="<%= user['name'] %>">Admin</label>
+          <% } %> <% }); %>
+        </ul>
+        <button type="submit" class="btn btn-primary">
+          Update Admin Privilege
+        </button>
+      </form>
+    </div>
+    <%- include("template/footer") %>
+  </body>
+</html>
