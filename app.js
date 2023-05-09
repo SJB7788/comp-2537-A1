@@ -212,9 +212,11 @@ app.post("/admin", async (req, res, next) => {
 app.get("/endSession", (req, res) => {
     if (req.session.destroy()) {
         sessionModel.deleteOne({ session: req.headers.cookie.replace('connect.sid=', '') })
-            .then(console.log('IT WORK'))
+            .then(() => {
+                console.log('IT WORK')
+                res.redirect("/login");
+            })
             .catch(error => { console.log(error) });
-        res.redirect("/login");
     } else {
         res.status(500).render("404.ejs");
     }
