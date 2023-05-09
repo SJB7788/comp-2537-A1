@@ -4,6 +4,7 @@ const { default: mongoose } = require("mongoose");
 const bcrypt = require("bcrypt");
 const app = express();
 require("dotenv").config();
+const MongoStore = require('connect-mongo');
 
 const Joi = require("joi");
 
@@ -11,32 +12,29 @@ const { userModel, sessionModel } = require("./model/users");
 
 let ejs = require('ejs');
 
-const expireTime = 1 * 60 * 60 * 1000;
-
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 
-let MongoDBStore = require('connect-mongodb-session')(session);
 
-let dbStore = new MongoDBStore({
-    url: `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`,
+const expireTime = 1 * 60 * 60 * 1000;
+app.use(express.urlencoded({ extended: false }));
+
+var mongoStore = MongoStore.create({
+	mongoUrl: `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_PASSWORD}@cluster0.0c1wpzp.mongodb.net/${process.env.MONGOOSE_FOLDER}?retryWrites=true&w=majority`,
     crypto: {
 		secret: process.env.SESSION_SECRET
-    }
+	}
 })
 
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
-        resave: true,
+        store: mongoStore,
         saveUninitialized: false,
-        store: dbStore,
-        cookie: {
-            maxAge: expireTime,
-        },
+        resave: true
     })
 );
 
@@ -211,7 +209,7 @@ app.post("/admin", async (req, res, next) => {
 
 app.get("/endSession", (req, res) => {
     if (req.session.destroy()) {
-        sessionModel.deleteOne({ session: req.headers.cookie.replace('connect.sid=', '') })
+        sessionModel.deleteMany({ session: req.headers.cookie.replace('connect.sid=', '') })
             .then(() => {
                 console.log('IT WORK')
                 res.redirect("/login");
