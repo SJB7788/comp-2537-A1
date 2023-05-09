@@ -20,6 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
     session({
         secret: '2acsjdbw - 4h2laosidhajs- 2eeasdds - 56jkoanfg4745 - 99idoasisd',
+        resave: true,
+        saveUninitialized: false,
         cookie: {
             maxAge: expireTime,
         },
